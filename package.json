@@ -7,7 +7,8 @@
     "start:debug": "DEBUG=openloggly:* yarn start",
     "build": "gulp",
     "lint": "eslint --ext .js app.js bin core middlewares models routes test",
-    "precommit": "yarn lint"
+    "precommit": "yarn lint",
+    "test": "yarn lint"
   },
   "dependencies": {
     "body-parser": "~1.17.1",
