@@ -2,6 +2,7 @@ const express = require('express')
 const path = require('path')
 const logger = require('morgan')
 const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
 
 const index = require('./routes/index')
 const users = require('./routes/users')
@@ -9,9 +10,15 @@ const users = require('./routes/users')
 const app = express()
 
 app.use(logger('dev'))
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json({limit: '5mb'}))
+app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.static(path.join(__dirname, 'public')))
+
+// mongoose
+mongoose.createConnection(process.env.MONGODB_URI, {server: {poolSize: process.env.MONGODB_POOL_SIZE}})
+if (app.get('env') === 'development') {
+  mongoose.set('debug', true)
+}
 
 app.use('/api/', index)
 app.use('/api/users', users)
