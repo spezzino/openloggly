@@ -16,6 +16,12 @@ jobs:
 
     working_directory: ~/repo
 
+    branches:
+      only:
+        - master
+        - develop
+        - feature/*
+
     steps:
       - checkout
 
@@ -33,5 +39,15 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      # run tests!
-      - run: yarn test
+      - store_test_results:
+          path: /tmp/test-results
+
+      # run lint
+      - run:
+          name: Linter
+          command: yarn lint
+
+      # run tests
+      - run:
+          name: Testing
+          command: yarn test
